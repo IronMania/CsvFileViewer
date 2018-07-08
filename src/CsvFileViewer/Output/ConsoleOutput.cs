@@ -6,42 +6,34 @@ namespace CsvFileViewer.Output
 {
     public class ConsoleOutput : IOutput
     {
+        private readonly Dictionary<ConsoleKey, Func<IPagedCsvFile, IPagedCsvFile>> _commands;
         private readonly int _pageSize;
 
         public ConsoleOutput(int pageSize)
         {
             _pageSize = pageSize;
+            _commands = new Dictionary<ConsoleKey, Func<IPagedCsvFile, IPagedCsvFile>>
+            {
+                {ConsoleKey.N, file => file.Next()},
+                {ConsoleKey.P, file => file.Previous()},
+                {ConsoleKey.F, file => file.First()},
+                {ConsoleKey.L, file => file.Last()},
+                {ConsoleKey.J, JumpToPage},
+                {ConsoleKey.X, file => null}
+            };
         }
 
         public void Show(CsvFile file)
         {
             var csv = PagedCsvFile.Create(file, _pageSize);
 
-            while (true)
+            while (csv != null)
             {
                 WriteToConsole(csv);
                 var answer = Console.ReadKey();
-                switch (answer.Key)
+                if (_commands.TryGetValue(answer.Key, out var func))
                 {
-                    case ConsoleKey.N:
-                        csv = csv.Next();
-                        break;
-                    case ConsoleKey.P:
-                        csv = csv.Previous();
-                        break;
-                    case ConsoleKey.F:
-                        csv = csv.First();
-                        break;
-                    case ConsoleKey.L:
-                        csv = csv.Last();
-                        break;
-                    case ConsoleKey.J:
-                        csv = JumpToPage(csv);
-                        break;
-                    case ConsoleKey.X:
-                        return;
-                    default:
-                        break;
+                    csv = func(csv);
                 }
             }
         }
