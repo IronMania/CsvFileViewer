@@ -61,7 +61,8 @@ namespace CsvFileViewer.Output
         {
             foreach (var line in file.ShownBody)
             {
-                Console.WriteLine(CreateLine(line, file.ColumnLength));
+                var text = CreateLine(line, file.ColumnLength);
+                Console.WriteLine(text);
             }
         }
 

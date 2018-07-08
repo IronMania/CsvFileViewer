@@ -23,8 +23,16 @@ namespace CsvFileViewer
 
         public static CsvFile Create(IList<string> lines)
         {
-            var header = lines.First().Split(Separator);
-            var body = lines.Skip(1).Select(s => (IList<string>) s.Split(Separator).ToList()).ToList();
+            var header = lines.First().Split(Separator).ToList();
+            header.Insert(0,"No.");
+            int lineIndex = 1;
+            var body = lines.Skip(1).Select(s =>
+            {
+                IList<string> line = s.Split(Separator).ToList();
+                line.Insert(0,lineIndex.ToString());
+                lineIndex++;
+                return line ;
+            }).ToList();
 
             return new CsvFile(header, body);
         }
