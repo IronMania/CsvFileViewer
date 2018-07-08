@@ -35,12 +35,24 @@ namespace CsvFileViewer.Output
                     case ConsoleKey.L:
                         csv = csv.Last();
                         break;
+                    case ConsoleKey.J:
+                        csv = JumpToPage(csv);
+                        break;
                     case ConsoleKey.X:
                         return;
                     default:
                         break;
                 }
             }
+        }
+
+        private IPagedCsvFile JumpToPage(IPagedCsvFile csv)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Which Page?");
+            var input = Console.ReadLine();
+            var newPage = int.Parse(input);
+            return csv.JumpToPage(newPage);
         }
 
         private void WriteToConsole(IPagedCsvFile csv)
@@ -54,7 +66,7 @@ namespace CsvFileViewer.Output
         private void CreateCommands(IPagedCsvFile file)
         {
             Console.WriteLine($"Page {file.CurrentPage} of {file.MaxPage}");
-            Console.WriteLine("N(ext page, P(revious page, F(irst page, L(ast page, eX(it");
+            Console.WriteLine("N(ext page, P(revious page, F(irst page, L(ast page, , J(ump to page, eX(it");
         }
 
         private void CreateBody(IPagedCsvFile file)

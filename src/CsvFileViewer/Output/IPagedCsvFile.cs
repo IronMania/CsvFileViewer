@@ -11,5 +11,6 @@ namespace CsvFileViewer.Output
         IPagedCsvFile Previous();
         IPagedCsvFile Next();
         IPagedCsvFile First();
+        IPagedCsvFile JumpToPage(int newPage);
     }
 }

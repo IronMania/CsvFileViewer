@@ -10,13 +10,13 @@ namespace CsvFileViewer.Output
         private readonly int _page;
         private readonly int _pageSize;
 
-        private PagedCsvFile(CsvFile csvFile, int pageSize, int page = 0)
+        private PagedCsvFile(CsvFile csvFile, int pageSize, int page = 1)
         {
             _csvFile = csvFile;
             _pageSize = pageSize;
-            if (page <= 0)
+            if (page <= 1)
             {
-                _page = 0;
+                _page = 1;
             }
             else if (page > LastPageIndex())
             {
@@ -28,12 +28,12 @@ namespace CsvFileViewer.Output
             }
         }
 
-        public int CurrentPage => _page + 1;
-        public int MaxPage => LastPageIndex() + 1;
+        public int CurrentPage => _page;
+        public int MaxPage => LastPageIndex();
 
         public IList<int> ColumnLength => CreateColumnLength(Header, ShownBody);
         public IList<string> Header => _csvFile.Header;
-        public IEnumerable<IList<string>> ShownBody => _csvFile.ShownBody.Skip(_page * _pageSize).Take(_pageSize);
+        public IEnumerable<IList<string>> ShownBody => _csvFile.ShownBody.Skip((_page -1) * _pageSize).Take(_pageSize);
 
         public IPagedCsvFile Next()
         {
@@ -50,6 +50,11 @@ namespace CsvFileViewer.Output
             return Create(_csvFile, _pageSize);
         }
 
+        public IPagedCsvFile JumpToPage(int newPage)
+        {
+           return  Create(_csvFile, _pageSize, newPage);
+        }
+
 
         public IPagedCsvFile Last()
         {
@@ -58,10 +63,10 @@ namespace CsvFileViewer.Output
 
         private int LastPageIndex()
         {
-            return _csvFile.ShownBody.Count() / _pageSize;
+            return _csvFile.ShownBody.Count() / _pageSize + 1;
         }
 
-        public static IPagedCsvFile Create(CsvFile file, int pageSize, int page = 0)
+        public static IPagedCsvFile Create(CsvFile file, int pageSize, int page = 1)
         {
             return new PagedCsvFile(file, pageSize, page);
         }
