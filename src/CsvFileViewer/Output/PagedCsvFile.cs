@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CsvFileViewer
+namespace CsvFileViewer.Output
 {
     public class PagedCsvFile : IPagedCsvFile
     {
@@ -27,6 +27,9 @@ namespace CsvFileViewer
                 _page = page;
             }
         }
+
+        public int CurrentPage => _page + 1;
+        public int MaxPage => LastPageIndex() + 1;
 
         public IList<int> ColumnLength => CreateColumnLength(Header, ShownBody);
         public IList<string> Header => _csvFile.Header;

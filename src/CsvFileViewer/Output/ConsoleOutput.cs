@@ -12,10 +12,11 @@ namespace CsvFileViewer.Output
         {
             _pageSize = pageSize;
         }
+
         public void Show(CsvFile file)
         {
-            IPagedCsvFile csv = PagedCsvFile.Create(file,_pageSize);
-            
+            var csv = PagedCsvFile.Create(file, _pageSize);
+
             while (true)
             {
                 WriteToConsole(csv);
@@ -40,7 +41,6 @@ namespace CsvFileViewer.Output
                         break;
                 }
             }
-            
         }
 
         private void WriteToConsole(IPagedCsvFile csv)
@@ -53,8 +53,8 @@ namespace CsvFileViewer.Output
 
         private void CreateCommands(IPagedCsvFile file)
         {
+            Console.WriteLine($"Page {file.CurrentPage} of {file.MaxPage}");
             Console.WriteLine("N(ext page, P(revious page, F(irst page, L(ast page, eX(it");
-
         }
 
         private void CreateBody(IPagedCsvFile file)
