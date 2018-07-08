@@ -6,7 +6,8 @@ namespace CsvFileViewer
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var viewer = new FileViewer(new FileProvider(args[0]), new ConsoleOutput());
+            viewer.Run();
         }
     }
 }
