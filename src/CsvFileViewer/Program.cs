@@ -1,12 +1,17 @@
-﻿using System;
+﻿using CsvFileViewer.Output;
 
 namespace CsvFileViewer
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            var viewer = new FileViewer(new FileProvider(args[0]), new ConsoleOutput());
+            if (!int.TryParse(args[1], out var lineLength))
+            {
+                lineLength = 3;
+            }
+
+            var viewer = new FileViewer(new FileProvider(args[0]), new ConsoleOutput(lineLength));
             viewer.Run();
         }
     }

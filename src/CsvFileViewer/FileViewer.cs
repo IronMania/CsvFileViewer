@@ -1,4 +1,4 @@
-﻿using System;
+﻿using CsvFileViewer.Output;
 
 namespace CsvFileViewer
 {
@@ -17,12 +17,7 @@ namespace CsvFileViewer
         public void Run()
         {
             var csv = _fileProvider.Read();
-            _output.Write(csv);
-            //csv.SelectPage(0);
-            //write available Commands
-            //WaitForCommands
-            //TODO: Remove
-            Console.ReadKey();
+            _output.Show(csv);
         }
     }
 }
